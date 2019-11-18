@@ -12,14 +12,18 @@ var express = require("express"),
 	User = require("./models/user"),
 	seedDB = require("./seeds")
 
-	
+
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-mongoose.connect("mongodb://localhost/yelp_camp");
+// Connect to mongodb locally
+// mongoose.connect("mongodb://localhost/yelp_camp");
+
+// Connect to MongoDB Atlas 
+mongoose.connect("mongodb+srv://pfdez:spicyp@cluster0-e8tt0.mongodb.net/test?retryWrites=true&w=majority");
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
