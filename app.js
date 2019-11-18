@@ -280,6 +280,6 @@ app.get("/logout",function(req,res){
 	res.redirect("/campgrounds");
 })
 
-app.listen(3000,function(){
+app.listen(process.env.PORT,function(){
 	console.log("SERVER IS RUNNING...");
 })
