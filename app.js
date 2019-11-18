@@ -19,11 +19,12 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-// Connect to mongodb locally
-// mongoose.connect("mongodb://localhost/yelp_camp");
 
-// Connect to MongoDB Atlas 
-mongoose.connect("mongodb+srv://pfdez:spicyp@cluster0-e8tt0.mongodb.net/test?retryWrites=true&w=majority");
+// We create an environment variable to connect to mongodb atlas if we are using heroku else we use the local mongodb database
+var databaseUrl = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(databaseUrl);
+
+
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
