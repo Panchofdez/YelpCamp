@@ -19,9 +19,8 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-
 // We create an environment variable to connect to mongodb atlas if we are using heroku else we use the local mongodb database
-var databaseUrl = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+var databaseUrl = process.env.DATABASEURL || "mongodb://localhost/yelp_camp"; 
 mongoose.connect(databaseUrl);
 
 
@@ -281,6 +280,6 @@ app.get("/logout",function(req,res){
 	res.redirect("/campgrounds");
 })
 
-app.listen(process.env.PORT,function(){
+app.listen(process.env.PORT || 3000,function(){
 	console.log("SERVER IS RUNNING...");
 })
