@@ -252,6 +252,9 @@ app.get("/register",function(req,res){
 // handle sign up logic
 app.post("/register",function(req,res){
 	var newUser= new User({username:req.body.username});
+	if(req.body.adminCode === "secretcode123"){
+		newUser.isAdmin = true;
+	}
 	User.register(newUser,req.body.password,function(err,user){
 		if(err){
 			req.flash("error",err.message);
