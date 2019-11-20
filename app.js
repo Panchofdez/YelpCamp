@@ -70,7 +70,7 @@ app.get("/campgrounds",function(req,res){
 		if(err){
 			console.log(err);
 		}else{
-			res.render("campgrounds/index",{ campgrounds:allCampgrounds});
+			res.render("campgrounds/index",{ campgrounds:allCampgrounds,page:"campgrounds"});
 		}
 	})
 })
@@ -247,7 +247,7 @@ app.delete("/campgrounds/:id/comments/:comment_id",middleware.checkCommentOwners
 
 // show register form
 app.get("/register",function(req,res){
-	res.render("register");
+	res.render("register",{page:"register"});
 })
 // handle sign up logic
 app.post("/register",function(req,res){
@@ -266,7 +266,7 @@ app.post("/register",function(req,res){
 
 // Show up login form 
 app.get("/login",function(req,res){
-	res.render("login");
+	res.render("login",{page:"login"});
 })
 // handling login logic
 app.post("/login",passport.authenticate("local",
