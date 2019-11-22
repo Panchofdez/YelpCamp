@@ -3,21 +3,30 @@ var router = express.Router();
 var Campground = require("../models/campground");
 var middleware = require("../middleware");
 
-// ================
-//  RESTful ROUTES
-// ================
-
 
 // INDEX ROUTE- SHOW ALL CAMPGROUNDS
 router.get("/",function(req,res){
+// 	because our search form in the index page was a GET request we get the search info in req.query.search not req.query.body
+	if(req.query.search){
+// 		We use regex to match the search query with the name of campgrounds in the database
+		var regex = new RegExp(escapeRegex(req.query.search), 'gi')
+		Campground.find({name:regex},function(err,allCampgrounds){
+			if(err){
+				console.log(err);
+			}else{
+				res.render("campgrounds/index",{ campgrounds:allCampgrounds,page:"campgrounds"});
+			}
+		})
+	}else{
 // 	Get all campground from database
-	Campground.find({},function(err,allCampgrounds){
-		if(err){
-			console.log(err);
-		}else{
-			res.render("campgrounds/index",{ campgrounds:allCampgrounds,page:"campgrounds"});
-		}
-	})
+		Campground.find({},function(err,allCampgrounds){
+			if(err){
+				console.log(err);
+			}else{
+				res.render("campgrounds/index",{ campgrounds:allCampgrounds,page:"campgrounds"});
+			}
+		})
+	}
 })
 
 // CREATE ROUTE-ADD NEW CAMPGROUND TO DATABASE
@@ -99,7 +108,10 @@ router.delete("/:id",middleware.checkCampgroundOwnership,function(req,res){
 	})
 })
 
-
+// function to format string to regex
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 
 module.exports = router;

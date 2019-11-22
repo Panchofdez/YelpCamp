@@ -9,11 +9,26 @@
 			<p>
 				<a class="btn btn-primary btn-lg" href="/campgrounds/new">Add new campground</a>
 			</p>
+
+			<form action="/campgrounds" method="GET" class="form-inline">
+				<div class="form-group">
+					<input type="text" name="search" placeholder="Campground search..." class="form-control">
+					<input type="submit" value="Search" class="btn btn-default"> 
+				</div>
+			</form>
+
 		</div>
 		
 	</header>
 	
 	<div class="row text-center" style = "display:flex; flex-wrap:wrap;">
+		<%if(campgrounds.length<1){%>
+			<div class="col-md-12">
+				<h3>
+					Sorry no matches found...
+				</h3>
+			</div>
+		<%}%>
 		<% campgrounds.forEach(function(campground){ %>
 		<div class="col-md-3 col-sm-6">
 			<div class="thumbnail">
