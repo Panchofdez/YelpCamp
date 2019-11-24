@@ -57,20 +57,27 @@ router.get("/",function(req,res){
 
 // CREATE ROUTE-ADD NEW CAMPGROUND TO DATABASE
 router.post("/",middleware.isLoggedIn, upload.single('image'), async function(req,res){
-// 	Check to see if user uploaded file
+// 	Check to see if user uploaded image file
 	if(req.file){
 		// Upload the image file
 // 		we use await to wait for this function to finish before executing other code
-		await cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
-		  if(err) {
-			req.flash('error', err.message);
-			return res.redirect('back');
-		  }
-			// add cloudinary url for the image to the campground object under image property
-			req.body.campground.image = result.secure_url;
-			// add image's public_id to campground object
-			req.body.campground.imageId = result.public_id;
-		});
+		try {
+			await cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+			  if(err) {
+				req.flash('error', err.message);
+				return res.redirect('back');
+			  }
+				// add cloudinary url for the image to the campground object under image property
+				req.body.campground.image = result.secure_url;
+				// add image's public_id to campground object
+				req.body.campground.imageId = result.public_id;
+			});
+		}catch(err){
+			if(err) {
+			  req.flash("error", err.message);
+			  return res.redirect("back");
+        	}	
+		}	
 	}
 	// add author to campground
       req.body.campground.author = {
@@ -84,7 +91,6 @@ router.post("/",middleware.isLoggedIn, upload.single('image'), async function(re
           return res.redirect('back');
         }
         res.redirect('/campgrounds/' + campground.id);
-    
     });
 });
 
