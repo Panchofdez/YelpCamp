@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
+var Comment = require("../models/comment");
 var middleware = require("../middleware");
 
 // Multer Configuration
@@ -164,9 +165,18 @@ router.delete("/:id",middleware.checkCampgroundOwnership,function(req,res){
 		if(campground.imageId){
 			await cloudinary.v2.uploader.destroy(campground.imageId);
 		}
-        campground.remove();
-        req.flash('success', 'Campground deleted successfully!');
-        res.redirect('/campgrounds');
+// 		Delete all comments associated with the campground by matching the comment id
+// 		*The $in operator selects the documents where the value of a field equals any value in the specified array
+		Comment.deleteMany( {_id: { $in: campground.comments } }, function (err) {
+			if (err) {
+				console.log(err);
+			}else{
+			campground.remove();
+			req.flash('success', 'Campground deleted successfully!');
+            res.redirect('/campgrounds');
+			}
+		});
+		
     } catch(err) {
         if(err) {
           req.flash("error", err.message);
