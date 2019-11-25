@@ -125,7 +125,7 @@ router.get("/:id/edit",middleware.checkCampgroundOwnership,function(req,res){
 // UPDATE CAMPGROUND
 router.put("/:id",middleware.checkCampgroundOwnership, upload.single('image'),function(req,res){
 // 	find the correct campground
-	 Campground.findById(req.params.id, async function(err, campground){
+	Campground.findById(req.params.id, async function(err, campground){
         if(err){
             req.flash("error", err.message);
             res.redirect("back");
@@ -173,16 +173,17 @@ router.delete("/:id",middleware.checkCampgroundOwnership,function(req,res){
 		}
 // 		Delete all comments associated with the campground by matching the comment id
 // 		*The $in operator selects the documents where the value of a field equals any value in the specified array
-		Comment.deleteMany( {_id: { $in: campground.comments } }, function (err) {
+		Comment.remove({"_id": {$in: campground.comments}}, function (err) {
 			if (err) {
 				console.log(err);
-			}else{
-			campground.remove();
-			req.flash('success', 'Campground deleted successfully!');
-            res.redirect('/campgrounds');
+				return res.redirect("/campgrounds");
 			}
+			//  delete the campground
+			campground.remove();
+			req.flash("success", "Campground deleted successfully!");
+			res.redirect("/campgrounds");
 		});
-		
+
     } catch(err) {
         if(err) {
           req.flash("error", err.message);

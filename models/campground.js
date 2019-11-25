@@ -20,6 +20,6 @@ var campgroundSchema = new mongoose.Schema ({
 			ref: "Comment"
 		}
 	]
-});
+}); 
 
 module.exports = mongoose.model("Campground", campgroundSchema);
